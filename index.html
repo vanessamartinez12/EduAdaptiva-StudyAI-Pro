@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduAdaptiva - StudyAI Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        body {
+            background: #020617;
+            background-image:
+                radial-gradient(circle at 15% 10%, rgba(56, 189, 248, .55) 0%, transparent 35%),
+                radial-gradient(circle at 85% 15%, rgba(37, 99, 235, .6) 0%, transparent 35%),
+                radial-gradient(circle at 50% 90%, rgba(14, 165, 233, .35) 0%, transparent 40%);
+            background-attachment: fixed;
+            color: #fff;
+            min-height: 100vh;
+            padding: 16px;
+        }
+        .header {
+            background: linear-gradient(90deg, #0ea5e9, #2563eb, #1d4ed8, #38bdf8);
+            background-size: 300% 100%;
+            animation: mover 6s linear infinite;
+            color: #fff;
+            padding: 22px 16px;
+            border-radius: 24px;
+            max-width: 650px;
+            margin: 0 auto 18px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(37, 99, 235, .4);
+        }
+        @keyframes mover {
+            to { background-position: 300% 0; }
+        }
+        .header h1 { font-size: 28px; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,.2); }
+        .header p { margin-top: 4px; font-size: 14px; opacity: .9; }
+        .container { max-width: 650px; margin: auto; display: flex; flex-direction: column; gap: 16px; }
+        .card { background: #ffffff; color: #0f172a; padding: 22px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,.45); border: 1px solid #dbeafe; }
+        .card h2 { font-size: 20px; margin-bottom: 10px; color: #1e40af; }
+        .sub { color: #64748b; font-size: 14px; margin-bottom: 10px; }
+        .top-quiz { display: flex; justify-content: space-between; font-size: 13px; color: #2563eb; font-weight: 700; margin-bottom: 10px; }
+        input, select { width: 100%; padding: 13px; border: 2px solid #bfdbfe; border-radius: 14px; margin: 6px 0 8px; font-size: 15px; outline: none; background: #f8fafc; color: #0f172a; }
+        input:focus, select:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.2); }
+        button { width: 100%; padding: 14px; border: none; border-radius: 14px; background: linear-gradient(135deg, #2563eb, #0ea5e9, #38bdf8); color: #fff; font-weight: 800; font-size: 15px; cursor: pointer; margin-top: 10px; box-shadow: 0 8px 20px rgba(37,99,235,.3); }
+        button:active { transform: scale(.98); }
+        button.opcion { background: #eff6ff; color: #1e40af; border: 2px solid #dbeafe; text-align: left; box-shadow: none; }
+        button.opcion:hover { background: #dbeafe; }
+        button.amarillo { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #fff; }
+        button.gris { background: #e0f2fe; color: #1e40af; }
+        button.verde { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        button.rojo { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .fila-botones { display: flex; gap: 8px; }
+        .fila-botones button { margin-top: 6px; font-size: 14px; padding: 12px; }
+        .chat { display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow-y: auto; padding: 5px; }
+        .msg { padding: 11px 14px; border-radius: 18px; max-width: 85%; font-size: 14.5px; line-height: 1.45; }
+        .bot { background: #eff6ff; color: #0f172a; border: 1px solid #bfdbfe; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .user { background: linear-gradient(135deg, #2563eb, #0ea5e9); color: #fff; align-self: flex-end; margin-left: auto; text-align: right; border-bottom-right-radius: 4px; }
+        .barra-fondo { background: #e2e8f0; height: 18px; border-radius: 999px; overflow: hidden; margin-top: 12px; }
+        .barra { height: 100%; background: linear-gradient(90deg, #2563eb, #38bdf8); width: 0%; transition: width .5s ease; }
+        .oculto { display: none; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>EduAdaptiva StudyAI Pro</h1>
+        <p>¿Y si estudiar fuera a tu manera?</p>
+    </header>
+    <div class="container">
+        <div id="p1" class="card">
+            <h2>¿Quién eres?</h2>
+            <p class="sub">Solo 2 datos y empezamos</p>
+            <input id="nombre" placeholder="Tu nombre">
+            <select id="materia">
+                <option value="quimica">Química - Conversiones</option>
+                <option value="mate">Matemáticas - Cálculo</option>
+                <option value="ingles">Inglés - To Be</option>
+                <option value="fisica">Física - Velocidad</option>
+                <option value="biologia">Biología</option>
+                <option value="historia">Historia</option>
+            </select>
+            <div class="fila-botones">
+                <button id="btn-agregar-materia" type="button" class="verde">➕ Agregar materia</button>
+                <button id="btn-eliminar-materia" type="button" class="rojo">🗑️ Eliminar</button>
+            </div>
+            <button id="btn-empezar" type="button">Empezar mi quiz ✨</button>
+        </div>
+        <div id="p2" class="card oculto">
+            <div class="top-quiz"><span id="contador">Pregunta 1 de 3</span><span id="puntos">⭐ 0 pts</span></div>
+            <h2 id="pregunta-quiz">Cargando...</h2>
+            <div id="opciones"></div>
+            <div class="barra-fondo"><div class="barra" id="barra"></div></div>
+        </div>
+        <div id="p3" class="card oculto">
+            <h2 id="titulo-resultado">Tu resultado</h2>
+            <div id="resultado-texto"></div>
+            <div class="barra-fondo"><div class="barra" id="barra-final"></div></div>
+            <button id="btn-plan" type="button">Ver mi plan con IA 🤖</button>
+        </div>
+        <div id="p4" class="card oculto">
+            <h2>Tu Plan Personalizado ✨</h2>
+            <div id="plan-texto"></div>
+            <hr style="margin:14px 0;border:1px solid #dbeafe">
+            <h2>Tu Tutor IA 💬</h2>
+            <div id="chat" class="chat"></div>
+            <input id="pregunta" type="text" placeholder="Ej: ¿Qué es la energía en los procesos de la vida?">
+            <button id="btn-enviar" type="button">Enviar</button>
+            <button id="btn-voz" type="button" class="amarillo">Hablar con voz 🎤</button>
+            <button id="btn-volver" type="button" class="gris">Volver al inicio ↩️</button>
+        </div>
+    </div>
+    <script>
+        let nombre = ""; let materia = "quimica"; let indice = 0; let puntos = 0; let aciertos = 0;
+        const QUIZ = {
+            quimica: [{ q: "¿Qué es la masa molar?", op: ["Lo que pesa 1 mol en gramos", "El peso de un átomo", "La velocidad"], correcta: 0 },{ q: "¿Cuánto pesa 1 mol de NaCl?", op: ["58.5 g", "10 g", "100 g"], correcta: 0 },{ q: "Si tienes 2 moles de NaCl, ¿cuántos gramos son?", op: ["117 g", "58.5 g", "20 g"], correcta: 0 }],
+            mate: [{ q: "¿Cuál es la derivada de x²?", op: ["2x", "x", "x³"], correcta: 0 },{ q: "¿Cuánto es el límite de x+1 cuando x->2?", op: ["3", "2", "1"], correcta: 0 },{ q: "¿Derivada de 5x?", op: ["5", "x", "0"], correcta: 0 }],
+            ingles: [{ q: "¿Cómo se dice 'Yo soy'?", op: ["I am", "I is", "I are"], correcta: 0 },{ q: "¿Cómo se dice 'Él es'?", op: ["He is", "He are", "He am"], correcta: 0 },{ q: "¿Cómo se dice 'Ellos son'?", op: ["They are", "They is", "They am"], correcta: 0 }],
+            fisica: [{ q: "¿Fórmula de velocidad?", op: ["distancia / tiempo", "tiempo / distancia", "masa x tiempo"], correcta: 0 },{ q: "100m en 10s, ¿velocidad?", op: ["10 m/s", "100 m/s", "1 m/s"], correcta: 0 },{ q: "¿Unidad de velocidad?", op: ["m/s", "kg", "litros"], correcta: 0 }],
+            biologia: [{ q: "¿Qué es una célula?", op: ["Unidad básica de la vida", "Un virus", "Un mineral"], correcta: 0 },{ q: "¿Dónde está el ADN?", op: ["En el núcleo", "En la piel", "En la sangre"], correcta: 0 },{ q: "¿Qué hace la mitocondria?", op: ["Da energía", "Da color", "Da forma"], correcta: 0 }],
+            historia: [{ q: "¿En qué año fue la Independencia de México?", op: ["1810", "1910", "1820"], correcta: 0 },{ q: "¿Quién fue Miguel Hidalgo?", op: ["Padre de la Independencia", "Un presidente de USA", "Un científico"], correcta: 0 },{ q: "¿Qué se celebra el 16 de septiembre?", op: ["Inicio de la Independencia", "Fin de la guerra", "Navidad"], correcta: 0 }]
+        };
+        function mostrar(id){ document.getElementById(id).classList.remove("oculto"); }
+        function ocultar(id){ document.getElementById(id).classList.add("oculto"); }
+        function crearClave(texto){ return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "").slice(0,20) || "materia"+Date.now(); }
+        document.getElementById("btn-agregar-materia").addEventListener("click", function(){
+            const nombreMateria = prompt("¿Qué materia quieres agregar? Ej: Español"); if(!nombreMateria || !nombreMateria.trim()) return;
+            const tema = prompt("¿Qué tema? Ej: Verbos") || nombreMateria.trim(); const clave = crearClave(nombreMateria);
+            if(QUIZ[clave]){ alert("Esa materia ya existe 👀 elígela del selector"); document.getElementById("materia").value = clave; return; }
+            QUIZ[clave] = [{ q: "¿Cuál es el tema principal de "+tema+"?", op: [tema, "Otro tema", "Ninguno"], correcta: 0 },{ q: "¿Qué quieres practicar de "+tema+"?", op: ["Lo básico", "Nada", "No sé"], correcta: 0 },{ q: "¿Ya estudiaste "+tema+" antes?", op: ["Sí, un poco", "Nunca", "No recuerdo"], correcta: 0 }];
+            const sel = document.getElementById("materia"); const opt = document.createElement("option"); opt.value = clave; opt.textContent = nombreMateria.trim()+" - "+tema.trim(); sel.appendChild(opt); sel.value = clave; alert("Materia agregada ✅ Ya la puedes usar");
+        });
+        document.getElementById("btn-eliminar-materia").addEventListener("click", function(){
+            const sel = document.getElementById("materia"); const clave = sel.value; const texto = sel.selectedOptions[0] ? sel.selectedOptions[0].text : clave; if(!clave) return;
+            if(sel.options.length <= 1){ alert("No puedes borrar la última materia 😅"); return; }
+            if(!confirm('¿Seguro que quieres eliminar "'+texto+'"?')) return; delete QUIZ[clave]; sel.remove(sel.selectedIndex); materia = sel.value; alert("Materia eliminada 🗑️");
+        });
+        document.getElementById("btn-empezar").addEventListener("click", function(){
+            nombre = document.getElementById("nombre").value.trim(); materia = document.getElementById("materia").value;
+            if(!nombre){ alert("Escribe tu nombre primero 🙏"); return; } if(!QUIZ[materia]){ alert("Esa materia ya no existe, elige otra"); return; }
+            indice=0; puntos=0; aciertos=0; ocultar("p1"); mostrar("p2"); ocultar("p3"); ocultar("p4"); mostrarPregunta();
+        });
+        function mostrarPregunta(){
+            const lista = QUIZ[materia]; const actual = lista[indice];
+            document.getElementById("contador").textContent = "Pregunta "+(indice+1)+" de "+lista.length;
+            document.getElementById("puntos").textContent = "⭐ "+puntos+" pts";
+            document.getElementById("pregunta-quiz").textContent = actual.q;
+            document.getElementById("barra").style.width = (indice/lista.length*100)+"%";
+            const cont = document.getElementById("opciones"); cont.innerHTML = "";
+            actual.op.forEach(function(texto,i){ const b=document.createElement("button"); b.type="button"; b.className="opcion"; b.textContent=texto; b.addEventListener("click", function(){ responder(i); }); cont.appendChild(b); });
+        }
+        function responder(i){ const lista=QUIZ[materia]; if(i===lista[indice].correcta){ puntos+=100; aciertos++; } indice++; if(indice<lista.length){ mostrarPregunta(); } else { mostrarResultado(); } }
+        function mostrarResultado(){
+            ocultar("p2"); mostrar("p3"); const total=QUIZ[materia].length; const porc=Math.round((aciertos/total)*100);
+            document.getElementById("titulo-resultado").textContent="¡Listo, "+nombre+"! 🎉";
+            document.getElementById("resultado-texto").innerHTML="<p style='font-size:18px'>Sacaste <b>"+aciertos+" de "+total+"</b></p><p style='color:#2563eb;font-weight:700;margin-top:6px'>"+porc+"%</p><p style='margin-top:6px'>Puntos: ⭐ "+puntos+"</p>";
+            document.getElementById("barra-final").style.width=porc+"%";
+        }
+        document.getElementById("btn-plan").addEventListener("click", function(){
+            ocultar("p3"); mostrar("p4"); const total=QUIZ[materia].length; const porc=Math.round((aciertos/total)*100);
+            const nombreMateria=document.getElementById("materia").selectedOptions[0].text;
+            let consejo = porc>=70 ? "Ya dominas lo básico, ahora practicamos con ejemplos difíciles." : porc>=40 ? "Vas a la mitad, repasamos lo básico con ejemplos fáciles." : "Empezamos desde cero, paso a paso, sin prisa.";
+            document.getElementById("plan-texto").innerHTML="<p><b>Hola "+nombre+" 👋</b></p><p style='margin:8px 0'>Materia: <b>"+nombreMateria+"</b> - Nivel: <b>"+porc+"%</b></p><p>"+consejo+"</p><p style='margin-top:8px'><b>Tu plan de hoy:</b><br>1️⃣ Repasar 1 concepto<br>2️⃣ Hacer 2 ejercicios juntos<br>3️⃣ Preguntarle a tu Tutor IA</p>";
+            document.getElementById("chat").innerHTML=""; agregarMensaje("Hola "+nombre+", soy tu Tutor IA. Sacaste "+porc+"% en "+nombreMateria+". Pregúntame lo que quieras de esta o cualquier materia, yo te lo explico.", "bot");
+        });
+        function agregarMensaje(texto,tipo){ const chat=document.getElementById("chat"); const div=document.createElement("div"); div.className="msg "+tipo; div.textContent=texto; chat.appendChild(div); chat.scrollTop=chat.scrollHeight; }
+        async function responderTutor(pregunta){
+            const nombreMateria=document.getElementById("materia").selectedOptions[0] ? document.getElementById("materia").selectedOptions[0].text : materia;
+            try{ const res=await fetch("/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({mensaje:pregunta,materia:nombreMateria,nombre:nombre})}); const data=await res.json(); if(data.respuesta) return data.respuesta; }catch(e){}
+            return "Claro, te explico de "+nombreMateria+": "+pregunta+" es un tema importante. Dime qué parte no entiendes y te lo explico con un ejemplo.";
+        }
+        document.getElementById("btn-enviar").addEventListener("click", async function(){
+            const input=document.getElementById("pregunta"); const texto=input.value.trim(); if(!texto) return;
+            agregarMensaje(texto,"user"); input.value=""; agregarMensaje("Pensando... 🤔","bot");
+            const resp=await responderTutor(texto); const chat=document.getElementById("chat"); chat.lastChild.textContent=resp;
+            try{ const u=new SpeechSynthesisUtterance(resp); u.lang="es-MX"; speechSynthesis.speak(u); }catch(e){}
+        });
+        document.getElementById("btn-voz").addEventListener("click", function(){
+            if(!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)){ alert("Tu navegador no soporta voz, escribe tu duda 🙏"); return; }
+            const Rec=window.SpeechRecognition || window.webkitSpeechRecognition; const rec=new Rec(); rec.lang="es-MX";
+            rec.onresult=function(e){ document.getElementById("pregunta").value=e.results[0][0].transcript; document.getElementById("btn-enviar").click(); };
+            rec.start(); agregarMensaje("🎤 Te estoy escuchando... habla ahora","bot");
+        });
+        document.getElementById("btn-volver").addEventListener("click", function(){ ocultar("p4"); mostrar("p1"); document.getElementById("nombre").value=nombre; });
+        document.getElementById("pregunta").addEventListener("keydown", function(e){ if(e.key==="Enter"){ document.getElementById("btn-enviar").click(); } });
+    </script>
+</body>
+</html> 

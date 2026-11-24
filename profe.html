@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><title>Panel Docente</title><link rel="stylesheet" href="/static/styles.css"></head>
+<body><header><h1>Panel Docente 📊</h1></header>
+<div class="container"><div class="card">
+<h2>Mi salón - CECyTE Yuste</h2>
+<p>Datos guardados como documentos. Cada alumno es un documento completo.</p>
+<table style="width:100%;font-size:14px"><thead><tr><th>Alumno</th><th>Materia</th><th>Nivel</th><th>Ánimo</th><th>Aciertos</th></tr></thead><tbody>
+{% for a in alumnos %}
+<tr><td><b>{{ a.nombre }}</b></td><td>{{ a.materia }}</td><td>{{ a.nivel }}</td><td>{{ a.animo }}</td><td>{{ a.aciertos }}/{{ a.total }}</td></tr>
+{% else %}
+<tr><td colspan="5">Aún no hay alumnos. Haz un quiz para que aparezcan aquí.</td></tr>
+{% endfor %}
+</tbody></table>
+<button onclick="location.href='/'">Volver al inicio</button>
+</div></div></body></html> 
